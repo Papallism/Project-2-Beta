@@ -66,6 +66,7 @@ int menu()
         if(choice < 1 || choice > 10)
             cout << "\nInvalid input!\n";
     }while(!(choice > 0 && choice < 11));
+    return choice;
 }
 
 void addCustomer(Customer cust[])
@@ -92,6 +93,13 @@ void addCustomer(Customer cust[])
         }
     }while(check);
     cust[currentCustomers].totalAccounts = 0;
+    int numOfAccs;
+    cout << "\nHow many accounts would you like to open? ";
+    cin >> numOfAccs;
+    for(int i = 0; i < numOfAccs; i++)
+    {
+        // Function 6 - open new account
+    }
     currentCustomers++;
 }
 
