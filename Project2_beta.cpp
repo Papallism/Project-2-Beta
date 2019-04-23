@@ -20,24 +20,35 @@ struct Customer{
 };
 
 int menu();
+void addCustomer(Customer []);
 
 int main()
 {
+    Customer customers[MAX];
     int choice;
     do
     {
         choice = menu();
         switch(choice)
         {
-            case 1: break;
-            case 2: break;
-            case 3: break;
-            case 4: break;
-            case 5: break;
-            case 6: break;
-            case 7: break;
-            case 8: break;
-            case 9: break;
+            case 1: addCustomer(customers);
+                    break;
+            case 2:
+                    break;
+            case 3:
+                    break;
+            case 4:
+                    break;
+            case 5:
+                    break;
+            case 6:
+                    break;
+            case 7:
+                    break;
+            case 8:
+                    break;
+            case 9:
+                    break;
             default: cout << "\nGood bye!\n";
                      break;
         }
@@ -54,5 +65,56 @@ int menu()
         cin >> choice;
         if(choice < 1 || choice > 10)
             cout << "\nInvalid input!\n";
-    }while(choice < 1 || choice > 10);
+    }while(!(choice > 0 && choice < 11));
 }
+
+void addCustomer(Customer cust[])
+{
+    cin.ignore();
+    cout << "\nPlease enter customer name: ";
+    cin.getline(cust[currentCustomers].name, 20);
+    cout << "Please enter customer address: ";
+    cin.getline(cust[currentCustomers].address, 50);
+    bool check;
+    do
+    {
+        check = false;
+        cout << "Please enter customer ID: ";
+        cin >> cust[currentCustomers].id;
+        for(int i = 0; i < currentCustomers; i++)
+        {
+            if(strcmp(cust[i].id, cust[currentCustomers].id) == 0)
+            {
+                cout << "\nThe ID entered is already in use!\n";
+                check = true;
+                i = currentCustomers;
+            }
+        }
+    }while(check);
+    cust[currentCustomers].totalAccounts = 0;
+    currentCustomers++;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
