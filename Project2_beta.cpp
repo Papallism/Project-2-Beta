@@ -102,12 +102,20 @@ void addCustomer(Customer cust[])
     }while(check);
     cust[currentCustomers].totalAccounts = 0;
     int numOfAccs;
-    cout << "\nHow many accounts would you like to open? ";
-    cin >> numOfAccs;
+    do
+    {
+        cout << "\nHow many accounts would you like to open? ";
+        cin >> numOfAccs;
+        if(numOfAccs > 5)
+            cout << "Maximum of accounts allowed is 5!\n";
+        else if(numOfAccs < 0)
+            cout << "\nInvalid input!\n";
+    }while(numOfAccs < 0 || numOfAccs > 5);
     for(int i = 0; i < numOfAccs; i++)
     {
         // Function 6 - open new account
     }
+
     currentCustomers++;
 }
 
