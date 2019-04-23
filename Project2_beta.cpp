@@ -22,10 +22,12 @@ struct Customer{
 int menu();
 void addCustomer(Customer []);
 int numberOfCustomers();
+bool findCustomer(Customer [], char []);
 
 int main()
 {
     Customer customers[MAX];
+    char findID[10];
     int choice;
     do
     {
@@ -36,7 +38,12 @@ int main()
                     break;
             case 2: cout << "\nThe number of current customers is " << numberOfCustomers() << endl;
                     break;
-            case 3:
+            case 3: cout << "\nEnter customer ID to search for: ";
+                    cin >> findID;
+                    if(findCustomer(customers, findID))
+                        cout << "\nCustomer with given ID found!\n";
+                    else
+                        cout << "\nCustomer with given ID not found!\n";
                     break;
             case 4:
                     break;
@@ -109,6 +116,13 @@ int numberOfCustomers()
     return currentCustomers;
 }
 
+bool findCustomer(Customer cust[], char givenID[])
+{
+    for(int i = 0; i < currentCustomers; i++)
+        if(strcmp(givenID, cust[i].id) == 0)
+            return true;
+    return false;
+}
 
 
 
