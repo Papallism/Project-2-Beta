@@ -21,6 +21,7 @@ struct Customer{
 
 int menu();
 void addCustomer(Customer []);
+int numberOfCustomers();
 
 int main()
 {
@@ -33,7 +34,7 @@ int main()
         {
             case 1: addCustomer(customers);
                     break;
-            case 2:
+            case 2: cout << "\nThe number of current customers is " << numberOfCustomers() << endl;
                     break;
             case 3:
                     break;
@@ -103,7 +104,10 @@ void addCustomer(Customer cust[])
     currentCustomers++;
 }
 
-
+int numberOfCustomers()
+{
+    return currentCustomers;
+}
 
 
 
