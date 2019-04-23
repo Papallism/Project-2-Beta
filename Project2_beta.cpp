@@ -7,7 +7,7 @@ int currentCustomers = 0;
 
 struct Account{
     int number;
-    int type;
+    int type; // 1 = checking, 2 = savings, 3 = money market
     float balance;
 };
 
@@ -23,12 +23,13 @@ int menu();
 void addCustomer(Customer []);
 int numberOfCustomers();
 bool findCustomer(Customer [], char []);
+void printAccHolderDetails(Customer [], int);
 
 int main()
 {
     Customer customers[MAX];
     char findID[10];
-    int choice;
+    int choice, givenAccNum;
     do
     {
         choice = menu();
@@ -45,7 +46,9 @@ int main()
                     else
                         cout << "\nCustomer with given ID not found!\n";
                     break;
-            case 4:
+            case 4: cout << "\nPlease enter account number: ";
+                    cin >> givenAccNum;
+                    printAccHolderDetails(customers, givenAccNum);
                     break;
             case 5:
                     break;
@@ -130,6 +133,26 @@ bool findCustomer(Customer cust[], char givenID[])
         if(strcmp(givenID, cust[i].id) == 0)
             return true;
     return false;
+}
+
+void printAccHolderDetails(Customer cust[], int givenNum)
+{
+    bool found = false;
+    for(int i = 0; i < currentCustomers; i++)
+    {
+        for(int j = 0; j < cust[i].totalAccounts; j++)
+        {
+            if(cust[i].accounts[j].number == givenNum)
+            {
+                found = true;
+                cout << "\nAccount holder name: " << cust[i].name;
+                cout << "\nAccount holder address: " << cust[i].address;
+                cout << "\nAccount holder ID: " << cust[i].id;
+            }
+        }
+    }
+    if(!found)
+        cout << "\nNo account found with such account number!\n";
 }
 
 
