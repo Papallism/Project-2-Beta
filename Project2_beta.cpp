@@ -1,11 +1,13 @@
 #include <iostream>
 #include <cstring>
+#include <cstdlib>
+#include <ctime>
 using namespace std;
 
 struct Account{
     int number;
     int type; // 1 = checking, 2 = savings, 3 = money market
-    float balance;
+    double balance;
 };
 
 struct Customer{
@@ -26,10 +28,11 @@ int numberOfCustomers();
 bool findCustomer(char []);
 void printAccHolderDetails(int);
 void printCustomerDetails(char []);
+void openNewAccount(char [], char []);
 
 int main()
 {
-    char findID[10];
+    char findID[10], name[20];
     int choice, givenAccNum;
     do
     {
@@ -57,7 +60,12 @@ int main()
                     cin.getline(findID, 10);
                     printCustomerDetails(findID);
                     break;
-            case 6:
+            case 6: cout << "\nEnter customer name: ";
+                    cin.ignore();
+                    cin.getline(name, 20);
+                    cout << "Enter customer ID: ";
+                    cin.getline(findID, 10);
+                    openNewAccount(name, findID);
                     break;
             case 7:
                     break;
@@ -109,6 +117,7 @@ void addCustomer()
         }
     }while(check);
     customers[currentCustomers].totalAccounts = 0;
+    currentCustomers++;
     int numOfAccs;
     do
     {
@@ -120,11 +129,7 @@ void addCustomer()
             cout << "\nInvalid input!\n";
     }while(numOfAccs < 0 || numOfAccs > 5);
     for(int i = 0; i < numOfAccs; i++)
-    {
-        // Function 6 - open new account
-    }
-
-    currentCustomers++;
+        openNewAccount(customers[currentCustomers - 1].name, customers[currentCustomers - 1].id);
 }
 
 int numberOfCustomers()
@@ -152,7 +157,7 @@ void printAccHolderDetails(int givenNum)
                 found = true;
                 cout << "\nAccount holder name: " << customers[i].name;
                 cout << "\nAccount holder address: " << customers[i].address;
-                cout << "\nAccount holder ID: " << customers[i].id;
+                cout << "\nAccount holder ID: " << customers[i].id << endl;
             }
         }
     }
@@ -162,25 +167,65 @@ void printAccHolderDetails(int givenNum)
 
 void printCustomerDetails(char givenID[])
 {
-    bool found = false;
-    for(int i = 0; i < currentCustomers; i++)
+    if(!findCustomer(givenID))
+        cout << "\nID not found.\n";
+    else
     {
-        if(strcmp(givenID, customers[i].id) == 0)
+        for(int i = 0; i < currentCustomers; i++)
         {
-            found = true;
-            cout << "\nCustomer name: " << customers[i].name;
-            cout << "\nCustomer address: " << customers[i].address << endl;
-            for(int j = 0; j < customers[i].totalAccounts; j++)
+            if(strcmp(givenID, customers[i].id) == 0)
             {
-                cout << "\nAccount number: " << customers[i].accounts[j].number;
-                cout << "\nAccount type: " << customers[i].accounts[j].type;
-                cout << "\nAccount balance: " << customers[i].accounts[j].balance;
+                cout << "\nCustomer name: " << customers[i].name;
+                cout << "\nCustomer address: " << customers[i].address << endl;
+                for(int j = 0; j < customers[i].totalAccounts; j++)
+                {
+                    cout << "\nAccount number: " << customers[i].accounts[j].number;
+                    cout << "\nAccount type: " << customers[i].accounts[j].type;
+                    cout << "\nAccount balance: " << customers[i].accounts[j].balance << endl;
+                }
+                i = currentCustomers;
             }
-            i = currentCustomers;
         }
     }
-    if(!found)
-        cout << "\nID not found.\n";
+}
+
+void openNewAccount(char custName[], char custID[])
+{
+    int i = 0;
+    bool check = true, regen;
+    if(!findCustomer(custID))
+        cout << "\nCustomer ID not found.\n";
+    else
+    {
+        while(check)
+        {
+            if(strcmp(custID, customers[i].id) == 0)
+                check = false;
+            i++;
+        }
+        i--;
+        if(customers[i].totalAccounts == 5)
+            cout << "\nMaximum number of accounts reached.\n";
+        else
+        {
+            do
+            {
+                regen = false;
+                srand(time(0));
+                customers[i].accounts[customers[i].totalAccounts].number = (rand() % 9999) + 1000;
+                for(int j = 0; j < currentCustomers; j++)
+                    for(int k = 0; k < customers[j].totalAccounts; k++)
+                        if(customers[i].accounts[customers[i].totalAccounts].number == customers[j].accounts[k].number)
+                            regen = true;
+            }while(regen);
+            cout << "\nAccount number: " << customers[i].accounts[customers[i].totalAccounts].number;
+            cout << "\nChoose type of account:\n1) Checking\n2) Savings\n3) Money market\n";
+            cin >> customers[i].accounts[customers[i].totalAccounts].type;
+            cout << "\nEnter balance: ";
+            cin >> customers[i].accounts[customers[i].totalAccounts].balance;
+            customers[i].totalAccounts++;
+        }
+    }
 }
 
 
