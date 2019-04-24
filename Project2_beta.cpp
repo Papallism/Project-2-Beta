@@ -2,9 +2,6 @@
 #include <cstring>
 using namespace std;
 
-const int MAX = 100;
-int currentCustomers = 0;
-
 struct Account{
     int number;
     int type; // 1 = checking, 2 = savings, 3 = money market
@@ -19,15 +16,18 @@ struct Customer{
     int totalAccounts;
 };
 
+const int MAX = 100;
+Customer customers[MAX];
+int currentCustomers = 0;
+
 int menu();
-void addCustomer(Customer []);
+void addCustomer(); // unfinished - missing open new account
 int numberOfCustomers();
-bool findCustomer(Customer [], char []);
-void printAccHolderDetails(Customer [], int);
+bool findCustomer(char []);
+void printAccHolderDetails(int);
 
 int main()
 {
-    Customer customers[MAX];
     char findID[10];
     int choice, givenAccNum;
     do
@@ -35,20 +35,21 @@ int main()
         choice = menu();
         switch(choice)
         {
-            case 1: addCustomer(customers);
+            case 1: addCustomer();
                     break;
             case 2: cout << "\nThe number of current customers is " << numberOfCustomers() << endl;
                     break;
             case 3: cout << "\nEnter customer ID to search for: ";
-                    cin >> findID;
-                    if(findCustomer(customers, findID))
+                    cin.ignore();
+                    cin.getline(findID, 10);
+                    if(findCustomer(findID))
                         cout << "\nCustomer with given ID found!\n";
                     else
                         cout << "\nCustomer with given ID not found!\n";
                     break;
             case 4: cout << "\nPlease enter account number: ";
                     cin >> givenAccNum;
-                    printAccHolderDetails(customers, givenAccNum);
+                    printAccHolderDetails(givenAccNum);
                     break;
             case 5:
                     break;
@@ -80,22 +81,22 @@ int menu()
     return choice;
 }
 
-void addCustomer(Customer cust[])
+void addCustomer()
 {
     cin.ignore();
     cout << "\nPlease enter customer name: ";
-    cin.getline(cust[currentCustomers].name, 20);
+    cin.getline(customers[currentCustomers].name, 20);
     cout << "Please enter customer address: ";
-    cin.getline(cust[currentCustomers].address, 50);
+    cin.getline(customers[currentCustomers].address, 50);
     bool check;
     do
     {
         check = false;
         cout << "Please enter customer ID: ";
-        cin >> cust[currentCustomers].id;
+        cin.getline(customers[currentCustomers].id, 10);
         for(int i = 0; i < currentCustomers; i++)
         {
-            if(strcmp(cust[i].id, cust[currentCustomers].id) == 0)
+            if(strcmp(customers[i].id, customers[currentCustomers].id) == 0)
             {
                 cout << "\nThe ID entered is already in use!\n";
                 check = true;
@@ -103,7 +104,7 @@ void addCustomer(Customer cust[])
             }
         }
     }while(check);
-    cust[currentCustomers].totalAccounts = 0;
+    customers[currentCustomers].totalAccounts = 0;
     int numOfAccs;
     do
     {
@@ -127,27 +128,27 @@ int numberOfCustomers()
     return currentCustomers;
 }
 
-bool findCustomer(Customer cust[], char givenID[])
+bool findCustomer(char givenID[])
 {
     for(int i = 0; i < currentCustomers; i++)
-        if(strcmp(givenID, cust[i].id) == 0)
+        if(strcmp(givenID, customers[i].id) == 0)
             return true;
     return false;
 }
 
-void printAccHolderDetails(Customer cust[], int givenNum)
+void printAccHolderDetails(int givenNum)
 {
     bool found = false;
     for(int i = 0; i < currentCustomers; i++)
     {
-        for(int j = 0; j < cust[i].totalAccounts; j++)
+        for(int j = 0; j < customers[i].totalAccounts; j++)
         {
-            if(cust[i].accounts[j].number == givenNum)
+            if(customers[i].accounts[j].number == givenNum)
             {
                 found = true;
-                cout << "\nAccount holder name: " << cust[i].name;
-                cout << "\nAccount holder address: " << cust[i].address;
-                cout << "\nAccount holder ID: " << cust[i].id;
+                cout << "\nAccount holder name: " << customers[i].name;
+                cout << "\nAccount holder address: " << customers[i].address;
+                cout << "\nAccount holder ID: " << customers[i].id;
             }
         }
     }
