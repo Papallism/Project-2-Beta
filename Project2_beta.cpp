@@ -25,6 +25,7 @@ void addCustomer(); // unfinished - missing open new account
 int numberOfCustomers();
 bool findCustomer(char []);
 void printAccHolderDetails(int);
+void printCustomerDetails(char []);
 
 int main()
 {
@@ -51,7 +52,10 @@ int main()
                     cin >> givenAccNum;
                     printAccHolderDetails(givenAccNum);
                     break;
-            case 5:
+            case 5: cout << "\nPlease enter customer ID: ";
+                    cin.ignore();
+                    cin.getline(findID, 10);
+                    printCustomerDetails(findID);
                     break;
             case 6:
                     break;
@@ -154,6 +158,29 @@ void printAccHolderDetails(int givenNum)
     }
     if(!found)
         cout << "\nNo account found with such account number!\n";
+}
+
+void printCustomerDetails(char givenID[])
+{
+    bool found = false;
+    for(int i = 0; i < currentCustomers; i++)
+    {
+        if(strcmp(givenID, customers[i].id) == 0)
+        {
+            found = true;
+            cout << "\nCustomer name: " << customers[i].name;
+            cout << "\nCustomer address: " << customers[i].address << endl;
+            for(int j = 0; j < customers[i].totalAccounts; j++)
+            {
+                cout << "\nAccount number: " << customers[i].accounts[j].number;
+                cout << "\nAccount type: " << customers[i].accounts[j].type;
+                cout << "\nAccount balance: " << customers[i].accounts[j].balance;
+            }
+            i = currentCustomers;
+        }
+    }
+    if(!found)
+        cout << "\nID not found.\n";
 }
 
 
