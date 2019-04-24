@@ -41,7 +41,7 @@ int main()
         {
             case 1: addCustomer();
                     break;
-            case 2: cout << "\nThe number of current customers is " << numberOfCustomers() << endl;
+            case 2: cout << "\nThe number of current customers is " << numberOfCustomers() << endl << endl;
                     break;
             case 3: cout << "\nEnter customer ID to search for: ";
                     cin.ignore();
@@ -85,7 +85,12 @@ int menu()
     int choice;
     do
     {
-        cout << "\nOperations:\n1) Add a new customer\n2) Print current total of customers\n3) Find a customer\n4) Print account holder details\n5) Print customer details\n6) Open a new account\n7) Delete customer\n8) Withdraw amount\n9) Provide reports\n10) Exit\nPlease choose operation: ";
+        for(int i = 0; i < 50; i++)
+            cout << "-";
+        cout << "\nOperations\n";
+        for(int i = 0; i < 50; i++)
+            cout << "-";
+        cout << "\n1) Add a new customer\n2) Print current total of customers\n3) Find a customer\n4) Print account holder details\n5) Print customer details\n6) Open a new account\n7) Delete customer\n8) Withdraw amount\n9) Provide reports\n10) Exit\n\nPlease choose operation: ";
         cin >> choice;
         if(choice < 1 || choice > 10)
             cout << "\nInvalid input!\n";
@@ -180,7 +185,16 @@ void printCustomerDetails(char givenID[])
                 for(int j = 0; j < customers[i].totalAccounts; j++)
                 {
                     cout << "\nAccount number: " << customers[i].accounts[j].number;
-                    cout << "\nAccount type: " << customers[i].accounts[j].type;
+                    cout << "\nAccount type: ";
+                    switch(customers[i].accounts[j].type)
+                    {
+                        case 1: cout << "Checking account";
+                                break;
+                        case 2: cout << "Savings account";
+                                break;
+                        case 3: cout << "Money market account";
+                                break;
+                    }
                     cout << "\nAccount balance: " << customers[i].accounts[j].balance << endl;
                 }
                 i = currentCustomers;
@@ -212,14 +226,14 @@ void openNewAccount(char custName[], char custID[])
             {
                 regen = false;
                 srand(time(0));
-                customers[i].accounts[customers[i].totalAccounts].number = (rand() % 9999) + 1000;
+                customers[i].accounts[customers[i].totalAccounts].number = (rand() % 9000) + 1000;
                 for(int j = 0; j < currentCustomers; j++)
                     for(int k = 0; k < customers[j].totalAccounts; k++)
                         if(customers[i].accounts[customers[i].totalAccounts].number == customers[j].accounts[k].number)
                             regen = true;
             }while(regen);
             cout << "\nAccount number: " << customers[i].accounts[customers[i].totalAccounts].number;
-            cout << "\nChoose type of account:\n1) Checking\n2) Savings\n3) Money market\n";
+            cout << "\nTypes of account:\n1) Checking\n2) Savings\n3) Money market\n\nPlease choose an account type: ";
             cin >> customers[i].accounts[customers[i].totalAccounts].type;
             cout << "\nEnter balance: ";
             cin >> customers[i].accounts[customers[i].totalAccounts].balance;
