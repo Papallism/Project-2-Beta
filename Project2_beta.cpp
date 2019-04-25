@@ -31,6 +31,7 @@ void printCustomerDetails(char []);
 void openNewAccount(char [], char []);
 void deleteCustomer(char []);
 void withdrawAmount(char [], char [], double);
+void reports();
 
 int main()
 {
@@ -84,7 +85,7 @@ int main()
                     cin >> withdraw;
                     withdrawAmount(name, findID, withdraw);
                     break;
-            case 9:
+            case 9: reports();
                     break;
             default: cout << "\nGood bye!\n";
                      break;
@@ -362,23 +363,40 @@ void withdrawAmount(char givenName[], char givenID[], double amount)
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void reports()
+{
+    int saving = 0, threeAccs = 0, rich;
+    double maxTotal = 0.0, currentTotal = 0.0;
+    for(int i = 0; i < currentCustomers; i++)
+    {
+        if(customers[i].totalAccounts > 3)
+            threeAccs++;
+        for(int j = 0; j < customers[i].totalAccounts; j++)
+        {
+            if(customers[i].accounts[j].type == 2)
+            {
+                saving++;
+                j = customers[i].totalAccounts;
+            }
+        }
+    }
+    for(int i = 0; i < currentCustomers; i++)
+    {
+        currentTotal = 0.0;
+        for(int j = 0; j < customers[i].totalAccounts; j++)
+            currentTotal += customers[i].accounts[j].balance;
+        if(currentTotal > maxTotal)
+        {
+            maxTotal = currentTotal;
+            rich = i;
+        }
+    }
+    cout << "\nReports:\n";
+    cout << "Percentage of customers with saving accounts: " << saving * (100 / currentCustomers) << "%";
+    cout << "\nPercentage of customers with more than three accounts: " << threeAccs * (100 / currentCustomers) << "%";
+    cout << "\nCustomer with the highest balance:\n";
+    cout << "Customer name: " << customers[rich].name;
+    cout << "\nCustomer address: " << customers[rich].address;
+    cout << "\nCustomer ID: " << customers[rich].id;
+    cout << "\nCustomer total balance: " << (double)maxTotal << endl;
+}
