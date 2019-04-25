@@ -30,11 +30,13 @@ void printAccHolderDetails(int);
 void printCustomerDetails(char []);
 void openNewAccount(char [], char []);
 void deleteCustomer(char []);
+void withdrawAmount(char [], char [], double);
 
 int main()
 {
     char findID[10], name[20];
     int choice, givenAccNum;
+    double withdraw;
     do
     {
         choice = menu();
@@ -73,7 +75,14 @@ int main()
                     cin.getline(findID, 10);
                     deleteCustomer(findID);
                     break;
-            case 8:
+            case 8: cout << "\nEnter customer name: ";
+                    cin.ignore();
+                    cin.getline(name, 20);
+                    cout << "Enter customer ID: ";
+                    cin.getline(findID, 10);
+                    cout << "Enter amount for withdrawal: ";
+                    cin >> withdraw;
+                    withdrawAmount(name, findID, withdraw);
                     break;
             case 9:
                     break;
@@ -290,6 +299,65 @@ void deleteCustomer(char givenID[])
             }
             cout << "\nCustomer deleted.\n";
             currentCustomers--;
+        }
+    }
+}
+
+void withdrawAmount(char givenName[], char givenID[], double amount)
+{
+    int i = 0, accNumChoice, accIndex;
+    bool check = true, accountCheck;
+    if(!findCustomer(givenID))
+        cout << "\nCustomer not found.\n";
+    else
+    {
+        while(check)
+        {
+            if(strcmp(givenID, customers[i].id) == 0)
+                check = false;
+            if(check)
+                i++;
+        }
+        if(strcmp(givenName, customers[i].name) != 0)
+            cout << "\nCustomer name and ID do not match.\n";
+        else
+        {
+            cout << "\nCurrent accounts:\n";
+            for(int j = 0; j < customers[i].totalAccounts; j++)
+            {
+                cout << "\nAccount number: " << customers[i].accounts[j].number;
+                cout << "\nAccount type: ";
+                switch(customers[i].accounts[j].type)
+                {
+                    case 1: cout << "Checking account";
+                            break;
+                    case 2: cout << "Savings account";
+                            break;
+                    case 3: cout << "Money market account";
+                            break;
+                }
+            }
+            accountCheck = true;
+            do
+            {
+                cout << "\n\nPlease enter the account number you wish to withdraw from: ";
+                cin >> accNumChoice;
+                for(int j = 0; j < customers[i].totalAccounts; j++)
+                    if(customers[i].accounts[j].number == accNumChoice)
+                    {
+                        accountCheck = false;
+                        accIndex = j;
+                    }
+                if(accountCheck)
+                    cout << "\nInvalid account number.";
+            }while(accountCheck);
+            while(customers[i].accounts[accIndex].balance - amount < 0)
+            {
+                cout << "\nNot enough balance. Please reenter amount for withdrawal.\n";
+                cin >> amount;
+            }
+            customers[i].accounts[accIndex].balance -= amount;
+            cout << "\nWithdrawal complete.\n";
         }
     }
 }
