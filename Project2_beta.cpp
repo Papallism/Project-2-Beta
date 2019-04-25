@@ -29,6 +29,7 @@ bool findCustomer(char []);
 void printAccHolderDetails(int);
 void printCustomerDetails(char []);
 void openNewAccount(char [], char []);
+void deleteCustomer(char []);
 
 int main()
 {
@@ -67,7 +68,10 @@ int main()
                     cin.getline(findID, 10);
                     openNewAccount(name, findID);
                     break;
-            case 7:
+            case 7: cout << "\nEnter customer ID: ";
+                    cin.ignore();
+                    cin.getline(findID, 10);
+                    deleteCustomer(findID);
                     break;
             case 8:
                     break;
@@ -243,6 +247,49 @@ void openNewAccount(char custName[], char custID[])
                 cin >> customers[i].accounts[customers[i].totalAccounts].balance;
                 customers[i].totalAccounts++;
             }
+        }
+    }
+}
+
+void deleteCustomer(char givenID[])
+{
+    int i = 0, step;
+    bool check = true;
+    double totBalance = 0.0;
+    if(!findCustomer(givenID))
+        cout << "\nCustomer ID not found.\n";
+    else
+    {
+        while(check)
+        {
+            if(strcmp(givenID, customers[i].id) == 0)
+                check = false;
+            if(check)
+                i++;
+        }
+        for(int j = 0; j < customers[i].totalAccounts; j++)
+            totBalance += customers[i].accounts[j].balance;
+        if(totBalance > 0)
+            cout << "\nCustomer balance is not 0. Deletion not allowed.\n";
+        else
+        {
+            step = i;
+            while(step < currentCustomers - 1)
+            {
+                strcpy(customers[i].name, customers[i + 1].name);
+                strcpy(customers[i].address, customers[i + 1].address);
+                strcpy(customers[i].id, customers[i + 1].id);
+                customers[i].totalAccounts = customers[i + 1].totalAccounts;
+                for(int k = 0; k < customers[i].totalAccounts; k++)
+                {
+                    customers[i].accounts[k].number = customers[i + 1].accounts[k].number;
+                    customers[i].accounts[k].type = customers[i + 1].accounts[k].type;
+                    customers[i].accounts[k].balance = customers[i + 1].accounts[k].balance;
+                }
+                step++;
+            }
+            cout << "\nCustomer deleted.\n";
+            currentCustomers--;
         }
     }
 }
