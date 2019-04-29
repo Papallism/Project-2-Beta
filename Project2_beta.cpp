@@ -253,8 +253,16 @@ void openNewAccount(char custName[], char custID[])
                 cout << "\nAccount number: " << customers[i].accounts[customers[i].totalAccounts].number;
                 cout << "\nTypes of account:\n1) Checking\n2) Savings\n3) Money market\n\nPlease choose an account type: ";
                 cin >> customers[i].accounts[customers[i].totalAccounts].type;
-                cout << "\nEnter balance: ";
-                cin >> customers[i].accounts[customers[i].totalAccounts].balance;
+                bool minBalance = true;
+                do
+                {
+                    cout << "\nEnter balance: ";
+                    cin >> customers[i].accounts[customers[i].totalAccounts].balance;
+                    if(customers[i].accounts[customers[i].totalAccounts].type == 3 && customers[i].accounts[customers[i].totalAccounts].balance < 20)
+                        cout << "\nMinimum balance for opening and maintaining a Money market account is $20.\n";
+                    else
+                        minBalance = false;
+                }while(minBalance);
                 customers[i].totalAccounts++;
             }
         }
