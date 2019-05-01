@@ -1,4 +1,4 @@
-// Michalis Papallis U184N0546
+// Michalis Papallis - U184N0546
 #include <iostream>
 #include <cstring>
 #include <cstdlib>
@@ -261,7 +261,7 @@ void openNewAccount(char custName[], char custID[])
                     cin >> customers[i].accounts[customers[i].totalAccounts].type;
                     if(customers[i].accounts[customers[i].totalAccounts].type < 1 || customers[i].accounts[customers[i].totalAccounts].type > 3)
                         cout << "\nInvalid input.\n";
-                }while(customers[i].accounts[customers[i].totalAccounts].type < 1 || customers[i].accounts[customers[i].totalAccounts].type > 3)
+                }while(customers[i].accounts[customers[i].totalAccounts].type < 1 || customers[i].accounts[customers[i].totalAccounts].type > 3);
                 bool minBalance = true;
                 do
                 {
@@ -426,5 +426,5 @@ void reports()
     cout << "Customer name: " << customers[rich].name;
     cout << "\nCustomer address: " << customers[rich].address;
     cout << "\nCustomer ID: " << customers[rich].id;
-    cout << "\nCustomer total balance: " << (double)maxTotal << endl;
+    cout << "\nCustomer total balance: " << maxTotal << endl;
 }
